@@ -8,4 +8,4 @@ An ETL pipeline that extracts daily played tracks from Spotify API
 ## Note
 + Makes use of spotipy module to handle authentication code flow for Spotify API
 + Registration to Spotify Dashboard is required to get ClientID and ClientSecret
-+ 
+
