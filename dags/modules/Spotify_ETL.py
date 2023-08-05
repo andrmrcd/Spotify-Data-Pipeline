@@ -25,7 +25,7 @@ def get_recently_played_songs():
     current date and time of execution.
 
     Spotipy library provides a more user-friendly interaction with the Spotify Web API.
-
+    
     Parameters:
         - auth_manager (spotipy.oauth2.SpotifyOAuth):
             Handles the OAuth 2.0 authorization code flow to obtain the user's authorization tokens.
@@ -112,12 +112,12 @@ def check_if_valid_data(df: pd.DataFrame) -> bool:
     # Check if dataframe is empty
     if df.empty:
         print("No songs downloaded. Finishing execution")
-        return False
+        raise False
     # Primary Key Check
     if pd.Series(df["played_at"]).is_unique:
         pass
     else:
-        return Exception("Primary Key Check violated")
+        raise Exception("Primary Key Check violated")
 
     # Check for nulls
     if df.isnull().values.any():
@@ -167,13 +167,15 @@ def load_db(song_df):
         song_df.to_sql("my_play_history", engine, index=False, if_exists="append")
         print("Upload successful")
     except Exception as e:
-        print(e)
+        print(f"Upload error: {e}")
 
 def main():
-    
+    # Get recently played songs data
     song_df = get_recently_played_songs()
 
+    # Check if data obtained is valid
     if check_if_valid_data(song_df):
         print("Data valid, proceed to load")
-    
+
+    # Load valid data to database
     load_db(song_df=song_df)
